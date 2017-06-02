@@ -23,6 +23,7 @@ compilation:
       set (HDF5 "OFF" CACHE STRING "disable HDF5 support")
       set (BIGOT "ON" CACHE STRING "do not allow any warning")
     env_file: <
-      export CC=gcc
-      export FC=gfortran
+      CC=gcc
+      CXX=g++
+      FC=gfortran
   <<: *compile
