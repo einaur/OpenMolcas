@@ -16,7 +16,7 @@ image: molcas/build-doc
 compilation:
   stage: build
   variables:
-    cache_file:
+    cache_file: |
       set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "opt, debug info")
       set (BUILD_SHARED_LIBS "OFF" CACHE STRING "do not use shared libmolcas")
       set (HDF5 "OFF" CACHE STRING "disable HDF5 support")
