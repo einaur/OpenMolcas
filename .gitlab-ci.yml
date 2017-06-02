@@ -25,6 +25,8 @@ before_script:
   # Disable host key checking
   - mkdir -p ~/.ssh && chmod 700 ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config && chmod 644 ~/.ssh/config'
+  # Install curl if not already installed
+  - 'which curl || ( apt-get update -y && apt-get install curl -y )'
 
 compilation:
   stage: build
