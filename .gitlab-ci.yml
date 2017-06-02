@@ -4,8 +4,7 @@ image: molcas/build-doc
   script:
     - mkdir build
     - cd build
-    - echo $cache_file > flags.cmake
-    - echo $env_file > flags.env
+    - echo "$cache_file" > flags.cmake
     - cat flags.cmake
     #- cmake -C flags.cmake ..
     #- make VERBOSE=1
@@ -18,10 +17,10 @@ compilation:
   stage: build
   variables:
     cache_file:
-      set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "opt, debug info") \
-      set (BUILD_SHARED_LIBS "OFF" CACHE STRING "do not use shared libmolcas") \
-      set (HDF5 "OFF" CACHE STRING "disable HDF5 support") \
-      set (BIGOT "ON" CACHE STRING "do not allow any warning") \
+      set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "opt, debug info")
+      set (BUILD_SHARED_LIBS "OFF" CACHE STRING "do not use shared libmolcas")
+      set (HDF5 "OFF" CACHE STRING "disable HDF5 support")
+      set (BIGOT "ON" CACHE STRING "do not allow any warning")
     CC: gcc
     CXX: g++
     FC: gfortran
