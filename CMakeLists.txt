@@ -2467,6 +2467,10 @@ execute_process (
         RESULT_VARIABLE GETEMIL_DESCRIBE_RC
         )
 if (GETEMIL_DESCRIBE_RC)
+        execute_process (
+                COMMAND cat getemil.err
+                WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+                )
         message (FATAL_ERROR "Failed to fetch Molcas binary: ${GETEMIL_DESCRIBE_ERROR}")
 endif ()
 list (APPEND progs_exe "molcas.exe")
