@@ -10,7 +10,7 @@ image: molcas/build-doc
     - cmake -C ~/flags.cmake ..
     - make VERBOSE=1
 
-.template: run-tests
+.template: &run-tests
   script:
     - molcas verify
 
