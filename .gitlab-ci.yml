@@ -17,11 +17,11 @@ image: molcas/build-doc
 compilation:
   stage: build
   variables:
-    cache_file: <
-      set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "opt, debug info")
-      set (BUILD_SHARED_LIBS "OFF" CACHE STRING "do not use shared libmolcas")
-      set (HDF5 "OFF" CACHE STRING "disable HDF5 support")
-      set (BIGOT "ON" CACHE STRING "do not allow any warning")
+    cache_file:
+      set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "opt, debug info") \
+      set (BUILD_SHARED_LIBS "OFF" CACHE STRING "do not use shared libmolcas") \
+      set (HDF5 "OFF" CACHE STRING "disable HDF5 support") \
+      set (BIGOT "ON" CACHE STRING "do not allow any warning") \
     CC: gcc
     CXX: g++
     FC: gfortran
