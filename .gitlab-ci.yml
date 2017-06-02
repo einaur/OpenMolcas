@@ -1,0 +1,28 @@
+image: molcas/build-doc
+
+.template: &compile
+  script:
+    - mkdir build
+    - cd build
+    - echo $cache_file > flags.cmake
+    - echo $env_file > flags.env
+    - . flags.env
+    - cmake -C ~/flags.cmake ..
+    - make VERBOSE=1
+
+.template: run-tests
+  script:
+    - molcas verify
+
+compilation:
+  stage: build
+  variables:
+    cache_file: <
+      set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "opt, debug info")
+      set (BUILD_SHARED_LIBS "OFF" CACHE STRING "do not use shared libmolcas")
+      set (HDF5 "OFF" CACHE STRING "disable HDF5 support")
+      set (BIGOT "ON" CACHE STRING "do not allow any warning")
+    env_file: <
+      export CC=gcc
+      export FC=gfortran
+  <<: *compile
