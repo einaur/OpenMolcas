@@ -2,12 +2,12 @@ image: molcas/build-doc
 
 .template: &compile
   script:
-    - git clone git@git.teokem.lu.se:molcas-extra ~/molcas-extra
+    - git clone --depth 10 git@git.teokem.lu.se:molcas-extra ~/molcas-extra
     - mkdir build
     - cd build
     - echo "$LICENSE_DAT" > license.dat
+    - cat license.dat
     - echo "$cache_file" > flags.cmake
-    - cat flags.cmake
     - cmake -C flags.cmake -D EXTRA=~/molcas-extra ..
     - make VERBOSE=1
 
