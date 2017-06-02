@@ -6,7 +6,6 @@ image: molcas/build-doc
     - cd build
     - echo $cache_file > flags.cmake
     - echo $env_file > flags.env
-    - . flags.env
     - cmake -C ~/flags.cmake ..
     - make VERBOSE=1
 
@@ -22,8 +21,7 @@ compilation:
       set (BUILD_SHARED_LIBS "OFF" CACHE STRING "do not use shared libmolcas")
       set (HDF5 "OFF" CACHE STRING "disable HDF5 support")
       set (BIGOT "ON" CACHE STRING "do not allow any warning")
-    env_file: <
-      CC=gcc
-      CXX=g++
-      FC=gfortran
+    CC: gcc
+    CXX: g++
+    FC: gfortran
   <<: *compile
