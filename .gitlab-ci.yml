@@ -2,14 +2,16 @@ image: molcas/build-doc
 
 .template: &compile
   script:
-    - git clone --depth 10 git@git.teokem.lu.se:molcas-extra ~/molcas-extra
+    #- git clone --depth 10 git@git.teokem.lu.se:molcas-extra ~/molcas-extra
     - mkdir build
     - cd build
-    - >
+    - >-
       echo "$LICENSE_DAT" | sed 's/\x0D$//' > license.dat
     - echo "$cache_file" > flags.cmake
-    - cmake -C flags.cmake -D EXTRA=~/molcas-extra ..
-    - make VERBOSE=1
+    - ls -l ../
+    - ls -l ../.git
+    #- cmake -C flags.cmake -D EXTRA=~/molcas-extra ..
+    #- make VERBOSE=1
 
 .template: &run-tests
   script:
@@ -24,7 +26,7 @@ before_script:
   - ssh-add <(echo "$SSH_PRIVATE_KEY")
   # Disable host key checking
   - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config && chmod 644 ~/.ssh/config'
+  #- '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config && chmod 644 ~/.ssh/config'
 
 compilation:
   stage: build
