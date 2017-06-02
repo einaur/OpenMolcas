@@ -5,7 +5,8 @@ image: molcas/build-doc
     - git clone --depth 10 git@git.teokem.lu.se:molcas-extra ~/molcas-extra
     - mkdir build
     - cd build
-    - echo "$LICENSE_DAT" > license.dat
+    - >
+      echo "$LICENSE_DAT" | sed 's/\x0D$//' > license.dat
     - echo "$cache_file" > flags.cmake
     - cmake -C flags.cmake -D EXTRA=~/molcas-extra ..
     - make VERBOSE=1
