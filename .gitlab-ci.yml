@@ -6,7 +6,7 @@ image: molcas/build-doc
     - cd build
     - echo $cache_file > flags.cmake
     - echo $env_file > flags.env
-    - cmake -C ~/flags.cmake ..
+    - cmake -C flags.cmake ..
     - make VERBOSE=1
 
 .template: &run-tests
@@ -23,5 +23,5 @@ compilation:
       set (BIGOT "ON" CACHE STRING "do not allow any warning")
     CC: gcc
     CXX: g++
-    FC: gfortran
+    FC: gfortran_bad
   <<: *compile
