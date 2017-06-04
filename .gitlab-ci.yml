@@ -15,28 +15,32 @@ image: molcas/build-doc
 .template: &compile
   <<: *install-key
   script:
-    - git clone --depth 10 git@git.teokem.lu.se:molcas-extra ~/molcas-extra
+    - >
+      if [ -n "$extra" ] ; then git clone --depth 10 git@git.teokem.lu.se:molcas-extra $extra ; fi
     - mkdir build
     - cd build
     - cp /license.dat .
     - echo "$cache_file" > flags.cmake
-    - cmake -C flags.cmake -D EXTRA=~/molcas-extra ..
+    - >
+      if [ -n "$extra" ] ; echo 'set (EXTRA "$ENV{extra}" CACHE PATH "location of molcas-extra")' > flags.cmake ; fi
+    - cmake -C flags.cmake -D EXTRA=/molcas-extra ..
     - make #VERBOSE=1
   allow_failure: true
   artifacts:
     paths:
       - build/
-      - ~/molcas-extra/sbin/molcas.driver
+      - $extra/sbin/molcas.driver
     expire_in: 1d
 
 .template: &run-tests
   script:
-    - sbin/install_driver.sh ~/molcas-extra/sbin/molcas.driver
+    - sbin/install_driver.sh /molcas-extra/sbin/molcas.driver
     - cd build
     - molcas verify
 
 .template: &nowarn
   variables:
+    extra: /molcas-extra
     cache_file: |
       set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "opt, debug info")
       set (BUILD_SHARED_LIBS "OFF" CACHE STRING "do not use shared libmolcas")
@@ -46,19 +50,22 @@ image: molcas/build-doc
     CXX: g++
     FC: gfortran
   tags:
-    - nowarn
     - gcc 5.4
+    - extra
+    - nowarn
     - hdf5
     - static
 
 .template: &plain
   variables:
+    extra: /molcas-extra
     cache_file: ""
     CC: gcc
     CXX: g++
     FC: gfortran
   tags:
     - gcc 5.4
+    - extra
 
 compilation:nowarn:
   stage: build
