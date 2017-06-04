@@ -1,4 +1,6 @@
 image: molcas/build-doc
+variables:
+  tests: .all
 
 .template: &install-key
   before_script:
@@ -32,8 +34,6 @@ image: molcas/build-doc
     expire_in: 1d
 
 .template: &run-tests
-  variables:
-    tests: .all
   script:
     - sbin/install_driver.sh build/molcas.driver
     - cd build
