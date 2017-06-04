@@ -26,13 +26,12 @@ image: molcas/build-doc
   artifacts:
     paths:
       - build/
+      - ~/molcas-extra/sbin/molcas.driver
     expire_in: 1d
 
 .template: &run-tests
   script:
-    - pwd
-    - ls
-    - sbin/install_driver.sh
+    - sbin/install_driver.sh ~/molcas-extra/sbin/molcas.driver
     - cd build
     - molcas verify
 
