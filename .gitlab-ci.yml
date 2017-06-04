@@ -2,6 +2,7 @@ image: molcas/build-doc
 
 .template: &compile
   script:
+    - echo "$FOO"
     - git clone --depth 10 git@git.teokem.lu.se:molcas-extra ~/molcas-extra
     - mkdir build
     - cd build
