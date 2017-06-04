@@ -32,10 +32,15 @@ image: molcas/build-doc
     expire_in: 1d
 
 .template: &run-tests
+  variables:
+    tests: .all
   script:
     - sbin/install_driver.sh build/molcas.driver
     - cd build
-    - molcas verify
+    - molcas verify $tests
+    - cat test/result
+    - >
+      for i in test/failed/*out ; do echo $i ; tail -100 $i ; done
 
 .template: &nowarn
   variables:
@@ -85,5 +90,7 @@ test:plain:
   stage: test
   dependencies:
     - compilation:plain
+  variables:
+    tests: standard
   <<: *plain
   <<: *run-tests
