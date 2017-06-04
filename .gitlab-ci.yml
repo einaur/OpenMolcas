@@ -2,14 +2,12 @@ image: molcas/build-doc
 
 .template: &compile
   script:
-    - echo "$FOO"
     - git clone --depth 10 git@git.teokem.lu.se:molcas-extra ~/molcas-extra
     - mkdir build
     - cd build
     #- >-
     #  echo "$LICENSE_DAT" | sed 's/\x0D$//' > license.dat
     - cp /license.dat .
-    - cat license.dat
     - echo "$cache_file" > flags.cmake
     - cmake -C flags.cmake -D EXTRA=~/molcas-extra ..
     - make VERBOSE=1
@@ -24,7 +22,8 @@ before_script:
   # Run ssh-agent (inside the build environment)
   - eval $(ssh-agent -s)
   # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
-  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  #- ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - ssh-add < /ssh_key
   # Disable host key checking
   - mkdir -p ~/.ssh && chmod 700 ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config && chmod 644 ~/.ssh/config'
