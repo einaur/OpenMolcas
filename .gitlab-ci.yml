@@ -21,7 +21,7 @@ image: molcas/build-doc
     - cp /license.dat .
     - echo "$cache_file" > flags.cmake
     - cmake -C flags.cmake -D EXTRA=~/molcas-extra ..
-    #- make #VERBOSE=1
+    - make #VERBOSE=1
   allow_failure: true
   artifacts:
     paths:
