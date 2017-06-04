@@ -22,7 +22,7 @@ image: molcas/build-doc
     - cp /license.dat .
     - echo "$cache_file" > flags.cmake
     - >
-      if [ -n "$extra" ] ; echo 'set (EXTRA "$ENV{extra}" CACHE PATH "location of molcas-extra")' > flags.cmake ; fi
+      if [ -n "$extra" ] ; then echo 'set (EXTRA "$ENV{extra}" CACHE PATH "location of molcas-extra")' > flags.cmake ; fi
     - cmake -C flags.cmake -D EXTRA=/molcas-extra ..
     - make #VERBOSE=1
   allow_failure: true
