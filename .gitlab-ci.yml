@@ -1,6 +1,19 @@
 image: molcas/build-doc
 
+.template: &install-key
+  before_script:
+    # Install ssh-agent if not already installed
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    # Run ssh-agent (inside the build environment)
+    - eval $(ssh-agent -s)
+    # Add the SSH key stored in the ssh_key file (created by the runner)
+    - ssh-add /ssh_key
+    # Disable host key checking
+    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config && chmod 644 ~/.ssh/config'
+
 .template: &compile
+  <<: *install-key
   script:
     - git clone --depth 10 git@git.teokem.lu.se:molcas-extra ~/molcas-extra
     - mkdir build
@@ -32,23 +45,12 @@ image: molcas/build-doc
 
 .template: &plain
   variables:
-    cache_file:
+    cache_file: ""
     CC: gcc
     CXX: g++
     FC: gfortran
   tags:
     - gcc 5.4
-
-before_script:
-  # Install ssh-agent if not already installed
-  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-  # Run ssh-agent (inside the build environment)
-  - eval $(ssh-agent -s)
-  # Add the SSH key stored in the ssh_key file (created by the runner)
-  - ssh-add /ssh_key
-  # Disable host key checking
-  - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config && chmod 644 ~/.ssh/config'
 
 compilation:nowarn:
   stage: build
