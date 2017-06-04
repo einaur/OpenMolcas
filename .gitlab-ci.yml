@@ -22,20 +22,19 @@ image: molcas/build-doc
     - cp /license.dat .
     - echo "$cache_file" > flags.cmake
     - >
-      if [ -n "$extra" ] ; then echo 'set (EXTRA "$ENV{extra}" CACHE PATH "location of molcas-extra")' > flags.cmake ; fi
+      if [ -n "$extra" ] ; then echo 'set (EXTRA "$ENV{extra}" CACHE PATH "location of molcas-extra")' > flags.cmake ; cp $extra/sbin/molcas.driver . ; fi
     - cmake -C flags.cmake -D EXTRA=/molcas-extra ..
     - make #VERBOSE=1
   allow_failure: true
   artifacts:
     paths:
       - build/
-      - $extra/sbin/molcas.driver
     expire_in: 1d
 
 .template: &run-tests
   script:
-    - sbin/install_driver.sh /molcas-extra/sbin/molcas.driver
     - cd build
+    - sbin/install_driver.sh molcas.driver
     - molcas verify
 
 .template: &nowarn
