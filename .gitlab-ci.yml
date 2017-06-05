@@ -40,9 +40,10 @@ image: molcas/build-doc
     # some clean up to reduce artifact size
     - >
       shopt -s globstar ; rm -rf **/CMakeFiles
-  cache:
+  artifacts:
     paths:
       - build/
+    expire_in: 3 hours
   # allow failures so that the next stages are not blocked
   # (but test jobs that depend on this will fail later)
   allow_failure: true
