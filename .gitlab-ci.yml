@@ -35,18 +35,22 @@ image: molcas/build-doc
   script:
     - sbin/install_driver.sh build/molcas.driver
     - cd build
-    - >
-      if [ -n "$tests" ] ; then export tests=".all" ; fi
-    - echo molcas verify $tests
-    - cat test/result
+    - |
+      if [ -n "$tests" ] ; then export tests=".none" ; fi
+      echo molcas verify $tests
+    #- cat test/result
   artifacts:
     paths:
       - build/test/result
       - build/test/failed/
     expire_in: 1 month
 
+.template: &vars
+  tests: .all
+
 .template: &nowarn
   variables:
+    <<: *vars
     extra: /molcas-extra
     cache_file: |
       set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "opt, debug info")
@@ -65,6 +69,7 @@ image: molcas/build-doc
 
 .template: &plain
   variables:
+    <<: *vars
     extra: /molcas-extra
     cache_file: ""
     CC: gcc
@@ -74,26 +79,24 @@ image: molcas/build-doc
     - gcc 5.4
     - extra
 
-compilation:nowarn:
+build:nowarn:
   stage: build
   <<: *nowarn
   <<: *compile
 test:nowarn:
   stage: test
   dependencies:
-    - compilation:nowarn
+    - build:nowarn
   <<: *nowarn
   <<: *run-tests
 
-compilation:plain:
+build:plain:
   stage: build
   <<: *plain
   <<: *compile
 test:plain:
   stage: test
   dependencies:
-    - compilation:plain
-  variables:
-    tests: standard
+    - build:plain
   <<: *plain
   <<: *run-tests
