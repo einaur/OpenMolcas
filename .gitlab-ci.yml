@@ -40,10 +40,9 @@ image: molcas/build-doc
     # some clean up to reduce artifact size
     - >
       shopt -s globstar ; rm -rf **/CMakeFiles
-  artifacts:
+  cache:
     paths:
       - build/
-    expire_in: 1 day
   # allow failures so that the next stages are not blocked
   # (but test jobs that depend on this will fail later)
   allow_failure: true
@@ -53,12 +52,14 @@ image: molcas/build-doc
     - sbin/install_driver.sh build/molcas.driver
     - cd build
     # default if no tests specified is .all
+    # run with "script" to force interactive terminal behaviour
     - |
       if [ -z "$tests" ] ; then export tests="grayzone" ; fi
-      molcas verify $tests
+      script -q -c "molcas verify $tests"
     - cat test/result
     - cp -L test/result ../result
     - cp -Lr test/failed ../failed
+    - cp -L ../failed/list ../failed/list.txt
   artifacts:
     paths:
       - result
