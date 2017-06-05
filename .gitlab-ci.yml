@@ -1,5 +1,10 @@
 image: molcas/build-doc
 
+# Define templates for "sub-jobs"
+# - install-key: install the SSH key to access private repositories
+# - compile: compile Molcas with CMake
+# - run-tests: run the verification suite
+
 .template: &install-key
   before_script:
     # Install ssh-agent if not already installed
@@ -17,30 +22,39 @@ image: molcas/build-doc
 .template: &compile
   <<: *install-key
   script:
-    - >
-      if [ -n "$extra" ] ; then git clone --depth 10 git@git.teokem.lu.se:molcas-extra $extra ; fi
     - mkdir build
     - cd build
     - cp /license.dat .
+    # save the CMake configuration from a variable
     - echo "$cache_file" > flags.cmake
-    - >
-      if [ -n "$extra" ] ; then echo 'set (EXTRA "$ENV{extra}" CACHE PATH "location of molcas-extra")' >> flags.cmake ; cp $extra/sbin/molcas.driver . ; fi
-    - cmake -C flags.cmake -D EXTRA=/molcas-extra ..
+    # clone molcas-extra and add the setting if specified
+    - |
+      if [ -n "$extra" ] ; then
+        git clone --depth 10 git@git.teokem.lu.se:molcas-extra $extra
+        echo 'set (EXTRA "$ENV{extra}" CACHE PATH "location of molcas-extra")' >> flags.cmake
+        # this file is copied so it is included in the artifacts
+        cp $extra/sbin/molcas.driver .
+      fi
+    - cmake -C flags.cmake ..
     - make #VERBOSE=1
+    # some clean up to reduce artifact size
     - >
       shopt -s globstar ; rm -rf **/CMakeFiles
-  allow_failure: true
   artifacts:
     paths:
       - build/
     expire_in: 1 day
+  # allow failures so that the next stages are not blocked
+  # (but test jobs that depend on this will fail later)
+  allow_failure: true
 
 .template: &run-tests
   script:
     - sbin/install_driver.sh build/molcas.driver
     - cd build
+    # default if no tests specified is .all
     - |
-      if [ -z "$tests" ] ; then export tests=".none" ; fi
+      if [ -z "$tests" ] ; then export tests=".all" ; fi
       molcas verify $tests
     - cat test/result
   artifacts:
@@ -48,6 +62,21 @@ image: molcas/build-doc
       - build/test/result
       - build/test/failed/
     expire_in: 1 month
+
+# Define some configuration groups (variables, tags, etc.) to be used in groups
+# - plain: default configuration
+# - nowarn: no warnings allowed
+
+.template: &plain
+  variables: &plain_vars
+    extra: /molcas-extra
+    cache_file: ""
+    CC: gcc
+    CXX: g++
+    FC: gfortran
+  tags:
+    - gcc 5.4
+    - extra
 
 .template: &nowarn
   variables: &nowarn_vars
@@ -67,27 +96,8 @@ image: molcas/build-doc
     - hdf5
     - static
 
-.template: &plain
-  variables: &plain_vars
-    extra: /molcas-extra
-    cache_file: ""
-    CC: gcc
-    CXX: g++
-    FC: gfortran
-  tags:
-    - gcc 5.4
-    - extra
-
-build:nowarn:
-  stage: build
-  <<: *nowarn
-  <<: *compile
-test:nowarn:
-  stage: test
-  dependencies:
-    - build:nowarn
-  <<: *nowarn
-  <<: *run-tests
+# Define the actual jobs, each job has a "build" and a "test" stage,
+# the latter depends on the former, variables can be overriden.
 
 build:plain:
   stage: build
@@ -99,6 +109,19 @@ test:plain:
     - build:plain
   <<: *plain
   <<: *run-tests
+
+build:nowarn:
+  stage: build
+  <<: *nowarn
+  <<: *compile
+test:nowarn:
+  stage: test
+  dependencies:
+    - build:nowarn
+  <<: *nowarn
+  <<: *run-tests
+  # only interested in compilation, so run no tests
+  # (but the job will fail if the compilation didn't succeed
   variables:
     <<: *plain_vars
-    tests: standard
+    tests: .none
