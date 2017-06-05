@@ -41,7 +41,7 @@ image: molcas/build-doc
     - cd build
     - |
       if [ -z "$tests" ] ; then export tests=".none" ; fi
-      echo molcas verify $tests
+      molcas verify $tests
     - cat test/result
   artifacts:
     paths:
