@@ -1,6 +1,4 @@
 image: molcas/build-doc
-variables:
-  tests: .all
 
 .template: &install-key
   before_script:
@@ -26,21 +24,26 @@ variables:
     - >
       if [ -n "$extra" ] ; then echo 'set (EXTRA "$ENV{extra}" CACHE PATH "location of molcas-extra")' >> flags.cmake ; cp $extra/sbin/molcas.driver . ; fi
     - cmake -C flags.cmake -D EXTRA=/molcas-extra ..
-    - make #VERBOSE=1
+    #- make #VERBOSE=1
   allow_failure: true
   artifacts:
     paths:
       - build/
-    expire_in: 1d
+    expire_in: 1 day
 
 .template: &run-tests
   script:
     - sbin/install_driver.sh build/molcas.driver
     - cd build
-    - molcas verify $tests
-    - cat test/result
     - >
-      for i in test/failed/*out ; do echo $i ; tail -100 $i ; done
+      if [ -n "$tests" ] ; then export tests=".all" ; fi
+    - echo molcas verify $tests
+    - cat test/result
+  artifacts:
+    paths:
+      - build/test/result
+      - build/test/failed/
+    expire_in: 1 month
 
 .template: &nowarn
   variables:
