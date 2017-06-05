@@ -45,12 +45,8 @@ image: molcas/build-doc
       - build/test/failed/
     expire_in: 1 month
 
-.template: &vars
-  tests: .all
-
 .template: &nowarn
-  variables:
-    <<: *vars
+  variables: &nowarn_vars
     extra: /molcas-extra
     cache_file: |
       set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "opt, debug info")
@@ -68,8 +64,7 @@ image: molcas/build-doc
     - static
 
 .template: &plain
-  variables:
-    <<: *vars
+  variables: &plain_vars
     extra: /molcas-extra
     cache_file: ""
     CC: gcc
@@ -100,3 +95,6 @@ test:plain:
     - build:plain
   <<: *plain
   <<: *run-tests
+  variables:
+    <<: *plain_vars
+    tests: standard
