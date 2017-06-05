@@ -54,13 +54,15 @@ image: molcas/build-doc
     - cd build
     # default if no tests specified is .all
     - |
-      if [ -z "$tests" ] ; then export tests=".all" ; fi
+      if [ -z "$tests" ] ; then export tests="grayzone" ; fi
       molcas verify $tests
     - cat test/result
+    - cp -L test/result ../result
+    - cp -Lr test/failed ../failed
   artifacts:
     paths:
-      - build/test/result
-      - build/test/failed/
+      - result
+      - failed/
     expire_in: 1 month
 
 # Define some configuration groups (variables, tags, etc.) to be used in groups
