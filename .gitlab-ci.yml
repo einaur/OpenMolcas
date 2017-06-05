@@ -26,7 +26,7 @@ image: molcas/build-doc
     - cmake -C flags.cmake -D EXTRA=/molcas-extra ..
     #- make #VERBOSE=1
     - <
-      shopt -s globstar ; rm -rf **/CMakeFiles
+      bash -O globstar -c "rm -rf **/CMakeFiles"
   allow_failure: true
   artifacts:
     paths:
