@@ -55,12 +55,11 @@ image: molcas/build-doc
     # default if no tests specified is .all
     # run with "script" to force interactive terminal behaviour
     - |
-      if [ -z "$tests" ] ; then export tests="grayzone" ; fi
+      if [ -z "$tests" ] ; then export tests=".all" ; fi
       script -q -c "molcas verify $tests"
     - cat test/result
     - cp -L test/result ../result
     - cp -Lr test/failed ../failed
-    - cp -L ../failed/list ../failed/list.txt
   artifacts:
     paths:
       - result
