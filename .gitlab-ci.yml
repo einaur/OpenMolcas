@@ -55,7 +55,7 @@ image: molcas/build-doc
     # default if no tests specified is .all
     # run with "script" to force interactive terminal behaviour
     - |
-      if [ -z "$tests" ] ; then export tests="grayzone" ; fi
+      if [ -z "$tests" ] ; then export tests=".all" ; fi
       script -e -q -c "molcas verify $tests"
   after_script:
     - |
@@ -74,6 +74,7 @@ image: molcas/build-doc
 # - nowarn: no warnings allowed
 
 .template: &plain
+  image: molcas/build-doc
   variables: &plain_vars
     extra: /molcas-extra
     cache_file: ""
@@ -85,6 +86,7 @@ image: molcas/build-doc
     - extra
 
 .template: &nowarn
+  image: molcas/build-doc
   variables: &nowarn_vars
     extra: /molcas-extra
     cache_file: |
@@ -98,9 +100,6 @@ image: molcas/build-doc
   tags:
     - gcc 5.4
     - extra
-    - nowarn
-    - hdf5
-    - static
 
 # Define the actual jobs, each job has a "build" and a "test" stage,
 # the latter depends on the former, variables can be overriden.
