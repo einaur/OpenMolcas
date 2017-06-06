@@ -59,9 +59,9 @@ image: molcas/build-doc
       script -e -q -c "molcas verify $tests"
   after_script:
     - |
-      cat test/result
-      cp -L test/result ../result
-      cp -Lr test/failed ../failed
+      cat build/test/result
+      cp -L build/test/result result
+      cp -Lr build/test/failed failed
   artifacts:
     paths:
       - result
