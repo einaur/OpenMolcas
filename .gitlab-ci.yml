@@ -44,6 +44,7 @@ image: molcas/build-doc
     paths:
       - build/
     expire_in: 3 hours
+  when: manual
   # allow failures so that the next stages are not blocked
   # (but test jobs that depend on this will fail later)
   allow_failure: true
@@ -68,6 +69,7 @@ image: molcas/build-doc
       - failed/
     expire_in: 1 month
     when: always
+  when: manual
 
 # Define some configuration groups (variables, tags, etc.) to be used in groups
 # - plain: default configuration
@@ -86,7 +88,7 @@ image: molcas/build-doc
     - extra
 
 .template: &nowarn
-  image: molcas/build-doc
+  image: registry.example.com/jellby/dockerfiles/gcc-5.4:latest
   variables: &nowarn_vars
     extra: /molcas-extra
     cache_file: |
