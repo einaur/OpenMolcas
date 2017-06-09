@@ -88,7 +88,7 @@ image: molcas/build-doc
     - extra
 
 .template: &nowarn
-  image: registry.example.com/jellby/dockerfiles/gcc-5.4:latest
+  image: registry.gitlab.com/jellby/dockerfiles/gcc-5.4:latest
   variables: &nowarn_vars
     extra: /molcas-extra
     cache_file: |
