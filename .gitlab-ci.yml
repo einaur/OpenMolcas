@@ -70,13 +70,15 @@ image: molcas/build-doc
     expire_in: 1 month
     when: always
   when: manual
+  allow_failure: false
 
 # Define some configuration groups (variables, tags, etc.) to be used in groups
 # - plain: default configuration
+# - pgi: use PGI compilers
 # - nowarn: no warnings allowed
 
 .template: &plain
-  image: molcas/build-doc
+  image: registry.gitlab.com/jellby/dockerfiles/gcc-5.4:latest
   variables: &plain_vars
     extra: /molcas-extra
     cache_file: ""
@@ -84,7 +86,19 @@ image: molcas/build-doc
     CXX: g++
     FC: gfortran
   tags:
-    - gcc 5.4
+    - docker
+    - extra
+
+.template: &pgi
+  image: registry.gitlab.com/jellby/dockerfiles/pgi:latest
+  variables: &pgi_vars
+    extra: /molcas-extra
+    cache_file: ""
+    CC: pgcc
+    CXX: pgc++
+    FC: pgfortran
+  tags: 
+    - docker
     - extra
 
 .template: &nowarn
@@ -100,7 +114,7 @@ image: molcas/build-doc
     CXX: g++
     FC: gfortran
   tags:
-    - gcc 5.4
+    - docker
     - extra
 
 # Define the actual jobs, each job has a "build" and a "test" stage,
@@ -115,6 +129,17 @@ test:plain:
   dependencies:
     - build:plain
   <<: *plain
+  <<: *run-tests
+
+build:pgi:
+  stage: build
+  <<: *pgi
+  <<: *compile
+test:pgi:
+  stage: test
+  dependencies:
+    - build:plain
+  <<: *pgi
   <<: *run-tests
 
 build:nowarn:
