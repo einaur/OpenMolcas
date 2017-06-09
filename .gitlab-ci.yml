@@ -28,11 +28,11 @@ image: molcas/build-doc
     # save the CMake configuration from a variable
     - echo "$cache_file" > flags.cmake
     # clone molcas-extra and add the setting if specified
+    # and copy molcas.driver so it is included in the artifacts
     - |
       if [ -n "$extra" ] ; then
         git clone --depth 10 git@git.teokem.lu.se:molcas-extra $extra
         echo 'set (EXTRA "$ENV{extra}" CACHE PATH "location of molcas-extra")' >> flags.cmake
-        # this file is copied so it is included in the artifacts
         cp $extra/sbin/molcas.driver .
       fi
     - cmake -C flags.cmake ..
@@ -138,7 +138,7 @@ build:pgi:
 test:pgi:
   stage: test
   dependencies:
-    - build:plain
+    - build:pgi
   <<: *pgi
   <<: *run-tests
 
