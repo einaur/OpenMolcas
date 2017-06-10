@@ -95,9 +95,9 @@ image: molcas/build-doc
     extra: /molcas-extra
     cache_file: |
     # Add -tp=x64 flag to make the result more portable
-    CC: pgcc -tp=x64
-    CXX: pgc++ -tp=x64
-    FC: pgfortran -tp=x64
+    CC: pgcc '-tp=x64'
+    CXX: pgc++ '-tp=x64'
+    FC: pgfortran '-tp=x64'
   tags: 
     - docker
     - extra
