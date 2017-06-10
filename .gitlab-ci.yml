@@ -93,7 +93,8 @@ image: molcas/build-doc
   image: registry.gitlab.com/jellby/dockerfiles/pgi:latest
   variables: &pgi_vars
     extra: /molcas-extra
-    cache_file: ""
+    cache_file: |
+      set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "no opt, debug info")
     CC: pgcc
     CXX: pgc++
     FC: pgfortran
@@ -106,7 +107,7 @@ image: molcas/build-doc
   variables: &nowarn_vars
     extra: /molcas-extra
     cache_file: |
-      set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "opt, debug info")
+      set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "no opt, debug info")
       set (BUILD_SHARED_LIBS "OFF" CACHE STRING "do not use shared libmolcas")
       set (HDF5 "OFF" CACHE STRING "disable HDF5 support")
       set (BIGOT "ON" CACHE STRING "do not allow any warning")
