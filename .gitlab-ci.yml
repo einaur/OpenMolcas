@@ -151,7 +151,7 @@ test:tinker:
   <<: *run-tests
   variables:
     <<: *plain_vars
-    tests: 072
+    tests: "072"
 
 # Define the actual jobs, each job has a "build" and a "test" stage,
 # the latter depends on the former, variables can be overriden.
