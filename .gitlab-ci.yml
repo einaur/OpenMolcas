@@ -127,13 +127,13 @@ tinker:
     - |
       apt-get install -y --no-install-recommends patch
       yes | Tools/patch2tinker/get_tinker
-  after_script:
-    - |
-      mkdir build
-      cp -Lr tinker build
+  #after_script:
+  #  - |
+  #    mkdir build
+  #    cp -Lr tinker build
   artifacts:
     paths:
-      - build
+      - tinker
     expire_in: 3 hours
   when: manual
   allow_failure: false
