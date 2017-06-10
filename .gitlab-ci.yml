@@ -137,6 +137,21 @@ tinker:
     expire_in: 3 hours
   when: manual
   allow_failure: false
+# to be removed
+build:tinker:
+  stage: build
+  <<: *plain
+  <<: *compile
+test:tinker:
+  stage: test
+  dependencies:
+    - build:tinker
+    - tinker
+  <<: *plain
+  <<: *run-tests
+  variables:
+    <<: *plain_vars
+    tests: 072
 
 # Define the actual jobs, each job has a "build" and a "test" stage,
 # the latter depends on the former, variables can be overriden.
