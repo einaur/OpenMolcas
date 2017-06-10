@@ -94,10 +94,10 @@ image: molcas/build-doc
   variables: &pgi_vars
     extra: /molcas-extra
     cache_file: |
-      set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "no opt, debug info")
-    CC: pgcc
-    CXX: pgc++
-    FC: pgfortran
+    # Add -tp=x64 flag to make the result more portable
+    CC: pgcc -tp=x64
+    CXX: pgc++ -tp=x64
+    FC: pgfortran -tp=x64
   tags: 
     - docker
     - extra
