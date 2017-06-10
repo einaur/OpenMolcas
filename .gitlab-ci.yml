@@ -118,6 +118,25 @@ image: molcas/build-doc
     - docker
     - extra
 
+# A special job for compiling the tinker interface
+
+tinker:
+  stage: build
+  image: registry.gitlab.com/jellby/dockerfiles/gcc-5.4:latest
+  script:
+    - |
+      yes | Tools/patch2tinker/get_tinker
+  after_script:
+    - |
+      mkdir build
+      cp -L tinker build
+  artifacts:
+    paths:
+      - build
+    expire_in: 3 hours
+  when: manual
+  allow_failure: false
+
 # Define the actual jobs, each job has a "build" and a "test" stage,
 # the latter depends on the former, variables can be overriden.
 
@@ -129,6 +148,7 @@ test:plain:
   stage: test
   dependencies:
     - build:plain
+    - tinker
   <<: *plain
   <<: *run-tests
 
@@ -140,6 +160,7 @@ test:pgi:
   stage: test
   dependencies:
     - build:pgi
+    - tinker
   <<: *pgi
   <<: *run-tests
 
