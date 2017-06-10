@@ -93,7 +93,7 @@ image: molcas/build-doc
   image: registry.gitlab.com/jellby/dockerfiles/pgi:latest
   variables: &pgi_vars
     extra: /molcas-extra
-    cache_file: |
+    cache_file: ""
     # Add -tp=x64 flag to make the result more portable
     CC: pgcc '-tp=x64'
     CXX: pgc++ '-tp=x64'
@@ -124,10 +124,9 @@ tinker:
   stage: build
   image: registry.gitlab.com/jellby/dockerfiles/gcc-5.4:latest
   script:
-    - |
-      apt-get install -y --no-install-recommends patch
-      yes | Tools/patch2tinker/get_tinker
-      echo $?
+    - apt-get install -y --no-install-recommends patch
+    - >
+      echo "y" | Tools/patch2tinker/get_tinker
   #after_script:
   #  - |
   #    mkdir build
