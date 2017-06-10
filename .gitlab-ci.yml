@@ -125,11 +125,12 @@ tinker:
   image: registry.gitlab.com/jellby/dockerfiles/gcc-5.4:latest
   script:
     - |
+      apt-get install -y --no-install-recommends patch
       yes | Tools/patch2tinker/get_tinker
   after_script:
     - |
       mkdir build
-      cp -L tinker build
+      cp -Lr tinker build
   artifacts:
     paths:
       - build
