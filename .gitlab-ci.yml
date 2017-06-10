@@ -133,7 +133,7 @@ tinker:
       cp -Lr tinker build
   artifacts:
     paths:
-      - tinker
+      - tinker/
     expire_in: 3 hours
   when: manual
   allow_failure: false
