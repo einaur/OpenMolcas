@@ -43,7 +43,7 @@ image: molcas/build-doc
   artifacts:
     paths:
       - build/
-    expire_in: 3 hours
+    expire_in: 1 day
   when: manual
   # allow failures so that the next stages are not blocked
   # (but test jobs that depend on this will fail later)
@@ -89,6 +89,24 @@ image: molcas/build-doc
     - docker
     - extra
 
+.template: &options
+  image: registry.gitlab.com/jellby/dockerfiles/gcc-5.4:latest
+  variables: &options_vars
+    extra: /molcas-extra
+    cache_file: |
+      set (CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "opt, debug info")
+      set (BUILD_SHARED_LIBS "ON" CACHE STRING "use shared libmolcas")
+      set (BUILD_STATIC_LIB "ON" CACHE STRING "build statit libmolcas too")
+      set (FDE "ON" CACHE STRING "Enable frozen-density-embedding (FDE) interface")
+      set (NECI "ON" CACHE STRING "Enable NECI interface (external NECI)")
+      set (TOOLS "ON" CACHE STRING "compile Tools")
+    CC: gcc
+    CXX: g++
+    FC: gfortran
+  tags:
+    - docker
+    - extra
+
 .template: &pgi
   image: registry.gitlab.com/jellby/dockerfiles/pgi:latest
   variables: &pgi_vars
@@ -119,6 +137,7 @@ image: molcas/build-doc
     - extra
 
 # A special job for compiling the tinker interface
+# By adding "tinker" as a dependency, other jobs can use it
 
 tinker:
   stage: build
@@ -134,7 +153,7 @@ tinker:
                            integer maxbnd,maxang,maxtors
                            integer maxbitor
                     -      parameter (maxatm=100000)
-                    +      parameter (maxatm=10000)
+                    +      parameter (maxatm=1000)
                            parameter (maxval=8)
                            parameter (maxgrp=1000)
                            parameter (maxref=10)
@@ -157,21 +176,6 @@ tinker:
     expire_in: 3 hours
   when: manual
   allow_failure: false
-# to be removed
-build:tinker:
-  stage: build
-  <<: *plain
-  <<: *compile
-test:tinker:
-  stage: test
-  dependencies:
-    - build:tinker
-    - tinker
-  <<: *plain
-  <<: *run-tests
-  variables:
-    <<: *plain_vars
-    tests: "072"
 
 # Define the actual jobs, each job has a "build" and a "test" stage,
 # the latter depends on the former, variables can be overriden.
@@ -186,6 +190,18 @@ test:plain:
     - build:plain
     - tinker
   <<: *plain
+  <<: *run-tests
+
+build:options:
+  stage: build
+  <<: *options
+  <<: *compile
+test:options:
+  stage: test
+  dependencies:
+    - build:options
+    - tinker
+  <<: *options
   <<: *run-tests
 
 build:pgi:
