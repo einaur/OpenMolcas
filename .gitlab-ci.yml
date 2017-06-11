@@ -140,12 +140,11 @@ tinker:
                            parameter (maxref=10)
   script:
     - apt-get install -y --no-install-recommends patch
-    # Apply the low memory patch
+    # Apply the low-memory patch
     - |
       eval `grep TINKERVERSION= Tools/patch2tinker/get_tinker`
       eval `grep PATCH= Tools/patch2tinker/get_tinker`
       echo "$patch_to_patch" >> Tools/patch2tinker/$PATCH
-      cat Tools/patch2tinker/$PATCH
     - >
       echo "y" | Tools/patch2tinker/get_tinker
   after_script:
