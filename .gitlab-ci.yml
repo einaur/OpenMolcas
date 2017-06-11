@@ -144,7 +144,7 @@ tinker:
     - |
       eval `grep TINKERVERSION= Tools/patch2tinker/get_tinker`
       eval `grep PATCH= Tools/patch2tinker/get_tinker`
-      echo $patch_to_patch >> Tools/patch2tinker/$PATCH
+      echo "$patch_to_patch" >> Tools/patch2tinker/$PATCH
       cat Tools/patch2tinker/$PATCH
     - >
       echo "y" | Tools/patch2tinker/get_tinker
