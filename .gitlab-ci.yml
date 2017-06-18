@@ -74,6 +74,7 @@ image: molcas/build-doc
 
 # Define some configuration groups (variables, tags, etc.) to be used in groups
 # - plain: default configuration
+# - options: enable several options
 # - pgi: use PGI compilers
 # - nowarn: no warnings allowed
 
@@ -191,6 +192,15 @@ test:plain:
     - tinker
   <<: *plain
   <<: *run-tests
+deploy:plain:
+  stage: deploy
+  dependencies:
+    - build:plain
+    - tinker
+  <<: *plain
+  environment:
+    name: Testing
+  when: manual
 
 build:options:
   stage: build
