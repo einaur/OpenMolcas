@@ -197,6 +197,8 @@ deploy:plain:
   dependencies:
     - build:plain
     - tinker
+  script:
+    - echo "Deploy"
   <<: *plain
   environment:
     name: Testing
