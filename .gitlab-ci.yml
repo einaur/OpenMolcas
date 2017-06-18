@@ -70,7 +70,8 @@ image: molcas/build-doc
     expire_in: 1 month
     when: always
   when: manual
-  allow_failure: false
+  #allow_failure: false
+  allow_failure: true
 
 # Define some configuration groups (variables, tags, etc.) to be used in groups
 # - plain: default configuration
