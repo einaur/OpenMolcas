@@ -162,6 +162,8 @@ tinker:
   script:
     - apt-get install -y --no-install-recommends patch
     # Apply the low-memory patch
+    - >
+      git clone -n https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com:Molcas/Tinker ; git -C Tinker checkout HEAD tinker-6.3.3.tar.gz ; mv Tinker/tinker-6.3.3.tar.gz .
     - |
       export TOKEN=$CI_JOB_TOKEN
       eval `grep TINKERVERSION= Tools/patch2tinker/get_tinker`
