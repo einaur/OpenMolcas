@@ -96,7 +96,7 @@ else
   #https://gitlab.com/Molcas/Tinker/raw/master/$TINKERVERSION.tar.gz?private_token=DdsqXQyzMnmsTSnyysX2
   echo ${TOKEN}
   wget http://dasher.wustl.edu/tinke/downloads/$TINKERVERSION.tar.gz || \
-  wget https://gitlab-ci-token:${TOKEN}@gitlab.com/Molcas/Tinker/raw/master/$TINKERVERSION.tar.gz
+  wget https://gitlab.com/Molcas/Tinker/raw/master/$TINKERVERSION.tar.gz?private_token=${TOKEN} -O $TINKERVERSION.tar.gz
   gzip -d $TINKERVERSION.tar.gz
   tar -xf $TINKERVERSION.tar
   if [ $? != 0 ]; then
