@@ -92,7 +92,7 @@ else
   else
     echo "Downloading $TINKERVERSION"
   fi
-  wget http://dasher.wustl.edu/tinke/downloads/$TINKERVERSION.tar.gz
+  wget http://dasher.wustl.edu/tinker/downloads/$TINKERVERSION.tar.gz
   gzip -d $TINKERVERSION.tar.gz
   tar -xf $TINKERVERSION.tar
   if [ $? != 0 ]; then

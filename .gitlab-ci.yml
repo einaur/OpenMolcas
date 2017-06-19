@@ -164,7 +164,6 @@ tinker:
     # Use backup if the tinker website is down
     - >
       sed -i -e 's/wget.*/& || \\/' -e '/wget/a (git clone -n https:\/\/gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com\/Molcas\/Tinker ; git -C Tinker checkout HEAD $TINKERVERSION.tar.gz ; mv Tinker\/$TINKERVERSION.tar.gz .)' Tools/patch2tinker/get_tinker
-    - cat Tools/patch2tinker/get_tinker
     # Apply the low-memory patch
     - |
       export TOKEN=$CI_JOB_TOKEN
