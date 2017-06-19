@@ -163,6 +163,7 @@ tinker:
     - apt-get install -y --no-install-recommends patch
     # Apply the low-memory patch
     - |
+      export TOKEN=$CI_JOB_TOKEN
       eval `grep TINKERVERSION= Tools/patch2tinker/get_tinker`
       eval `grep PATCH= Tools/patch2tinker/get_tinker`
       echo "$patch_to_patch" >> Tools/patch2tinker/$PATCH
