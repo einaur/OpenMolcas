@@ -145,6 +145,7 @@ tinker:
   stage: build
   image: registry.gitlab.com/jellby/dockerfiles/gcc-5.4:latest
   variables:
+    CI_DEBUG_TRACE: "true"
     # A patch to the tinker patch to make it work in low memory conditions
     patch_to_patch: |
                     diff -Nu -x '*~' -x '*.o' 6.3.3/source_orig/sizes.i 6.3.3/source/sizes.i
