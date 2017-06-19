@@ -161,8 +161,6 @@ tinker:
                            parameter (maxref=10)
   script:
     - apt-get install -y --no-install-recommends patch
-    - >
-      git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/Molcas/Tinker.git
     # Apply the low-memory patch
     - |
       export TOKEN=$CI_JOB_TOKEN
