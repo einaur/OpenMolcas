@@ -163,10 +163,10 @@ tinker:
     - apt-get install -y --no-install-recommends patch
     # Use backup if the tinker website is down
     - >
-      sed -i -e 's/wget.*/& || \\/' -e '/wget/a (git clone -n https:\/\/gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com\/Molcas\/Tinker ; git -C Tinker checkout HEAD $TINKERVERSION.tar.gz ; mv Tinker\/$TINKERVERSION.tar.gz .)' Tools/patch2tinker/get_tinker
+      sed -i -e 's/dasher/dashier/' Tools/patch2tinker/get_tinker
+      sed -i -e 's/wget.*/& || \\/' -e '/wget/a wget https://gitlab.com/Molcas/Tinker/raw/master/$TINKERVERSION.tar.gz?private_token=Y5PsqzY_Ev8U6JQDGyuL -O $TINKERVERSION.tar.gz' Tools/patch2tinker/get_tinker
     # Apply the low-memory patch
     - |
-      export TOKEN=$CI_JOB_TOKEN
       eval `grep TINKERVERSION= Tools/patch2tinker/get_tinker`
       eval `grep PATCH= Tools/patch2tinker/get_tinker`
       echo "$patch_to_patch" >> Tools/patch2tinker/$PATCH
