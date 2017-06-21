@@ -163,7 +163,7 @@ tinker:
     - apt-get install -y --no-install-recommends patch
     # Use backup if the tinker website is down
     - >
-      sed -i -e 's/wget.*/& || \\/' -e '/wget/a wget https://gitlab.com/Molcas/Tinker/raw/master/$TINKERVERSION.tar.gz?private_token=Y5PsqzY_Ev8U6JQDGyuL -O $TINKERVERSION.tar.gz' Tools/patch2tinker/get_tinker
+      sed -i -e 's/wget.*/& || \\/' -e '/wget/a wget https://gitlab.com/Molcas/Mirrors/Tinker/raw/master/$TINKERVERSION.tar.gz?private_token=Y5PsqzY_Ev8U6JQDGyuL -O $TINKERVERSION.tar.gz' Tools/patch2tinker/get_tinker
     # Apply the low-memory patch
     - |
       eval `grep TINKERVERSION= Tools/patch2tinker/get_tinker`
